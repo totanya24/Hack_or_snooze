@@ -87,22 +87,37 @@ async function submitNewStory(evt){
     console.debug("submitNewStory");
     evt.preventDefault();
 
+
     const title = $("#create-title").val();
     const url = $("#create-url").val();
     const author = $("#create-author").val();
     const username = currentUser.username
     const storyData = {title, url, author, username};
 
+    for ( let story of currentUser.ownStories) {
+        console.log('story.innerval', story.title)
+        console.log('input.value', title)
+
+        //const oldStory = story;
+        if (story.title.toLowerCase() === title.toLowerCase()) {
+            alert("duplicate message");
+            return
+        }
+    }
+
     const story = await storyList.addStory(currentUser, storyData);
 
     const $story = generateStoryMarkup(story);
     $allStoriesList.prepend($story);
+
+
 
     $submitForm.slideUp("slow");
     $submitForm.trigger("reset");
 }
 
 $submitForm.on("submit", submitNewStory);
+
 
 function putUserStoriesOnPage(){
     console.log("putUserStoriesOnPage");
@@ -116,8 +131,11 @@ function putUserStoriesOnPage(){
         for(let story of currentUser.ownStories){
             let $story = generateStoryMarkup(story, true);
             $ownStories.append($story);
+
+            // console.log('c',currentUser.ownStories.innerText)
         }
     }
+    //console.log('before show:', $ownStories)
     $ownStories.show();
 }
 
@@ -142,7 +160,7 @@ async function toggleStoryFavorites(evt){
     const $tgt = $(evt.target);
     const $closestLi = $tgt.closest("li");
     const storyId = $closestLi.attr("id");
-    const story = storyList.getStories.find(s => s.storyId === storyId);
+    const story = storyList.stories.find(s => s.storyId === storyId);
 
     if ($tgt.hasClass("fas")){
         await currentUser.removeFavorite(story);
@@ -152,4 +170,4 @@ async function toggleStoryFavorites(evt){
         $tgt.closest("i").toggleClass("fas far");
     }
 }
-$storieslist.on("click", ".start", toggleStoryFavorites);
+$storieslist.on("click", ".star", toggleStoryFavorites);

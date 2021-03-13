@@ -30,7 +30,7 @@ function navFavoritesClick(evt){
 
 }
 
-$body.on("click", "#nav-my-stories", navFavoritesClick );
+$body.on("click", "#nav-favorites", navFavoritesClick );
 
 function navMyStories(evt){
     console.debug("navMyStories", evt);
@@ -59,10 +59,7 @@ $navUserProfile.on("click", navProfileClick);
 
 function updateNavOnLogin() {
     console.debug("updateNavOnLogin");
-    $(".main-nav-links").show();
-    $(".main-nav-links").show();
-    $(".nav-left").show();
-    $(".user-info-container").show();
+    $(".main-nav-link").show();
     $navLogin.hide();
     $navLogOut.show();
     $navUserProfile.text(`${currentUser.username}`).show();
